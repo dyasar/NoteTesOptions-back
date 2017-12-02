@@ -1,6 +1,6 @@
 export interface Option {
     id: string;
-    intitulé: string;
+    nom: string;
     description: string;
     prof: string;
 }
