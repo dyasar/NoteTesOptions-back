@@ -1,7 +1,7 @@
 import { HapinessModule, HttpServerService, OnError, OnStart } from '@hapiness/core';
 import { LoggerModule, LoggerService } from '@hapiness/logger';
 import { Observable } from 'rxjs/Observable';
-import {GetAllOptionRoute} from './routes';
+import {GetAllOptionRoute, GetOneOptionRoute} from './routes';
 import {OptionService} from './services';
 
 @HapinessModule({
@@ -9,7 +9,7 @@ import {OptionService} from './services';
     imports: [
         LoggerModule
     ],
-    declarations: [GetAllOptionRoute],
+    declarations: [GetAllOptionRoute, GetOneOptionRoute],
     providers: [
         HttpServerService,
         OptionService
