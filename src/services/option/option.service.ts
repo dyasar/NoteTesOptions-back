@@ -80,7 +80,7 @@ export class OptionService {
                 find(_ => _.nom.toLowerCase() === opt.nom.toLowerCase()),
                 flatMap(_ => !!_ ?
                     _throw(
-                        Biim.conflict(`Option with intitulé '${opt.nom}'already exists`)
+                        Biim.conflict(`Option with nom '${opt.nom}'already exists`)
                     ) :
                     this._addOption(opt)
                 )

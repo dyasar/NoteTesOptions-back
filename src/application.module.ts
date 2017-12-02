@@ -1,8 +1,9 @@
 import { HapinessModule, HttpServerService, OnError, OnStart } from '@hapiness/core';
 import { LoggerModule, LoggerService } from '@hapiness/logger';
 import { Observable } from 'rxjs/Observable';
-import {GetAllOptionRoute, GetOneOptionRoute, PostCreateOptionRoute, PutUpdateOptionRoute, DeleteOnePeopleRoute} from './routes';
-import {OptionService} from './services';
+import {GetAllOptionRoute, GetOneOptionRoute, PostCreateOptionRoute, PutUpdateOptionRoute, DeleteOnePeopleRoute,
+    GetOneNoteRoute, PostCreateNoteRoute} from './routes';
+import {OptionService, NoteService} from './services';
 import { SwagModule } from '@hapiness/swag';
 import { Config } from '@hapiness/config';
 
@@ -13,10 +14,12 @@ import { Config } from '@hapiness/config';
         LoggerModule,
         SwagModule.setConfig(Config.get('swag'))
     ],
-    declarations: [GetAllOptionRoute, GetOneOptionRoute, PostCreateOptionRoute, PutUpdateOptionRoute, DeleteOnePeopleRoute],
+    declarations: [GetAllOptionRoute, GetOneOptionRoute, PostCreateOptionRoute, PutUpdateOptionRoute, DeleteOnePeopleRoute,
+        GetOneNoteRoute, PostCreateNoteRoute],
     providers: [
         HttpServerService,
-        OptionService
+        OptionService,
+        NoteService
     ]
 })
 export class ApplicationModule implements OnStart, OnError {
