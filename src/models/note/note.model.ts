@@ -41,7 +41,7 @@ export class NoteModel extends Model {
                 type: Number,
                 required: true
             },
-            note_examen: {
+            note_difficulté_examen: {
                 type: Number,
                 required: true
             }

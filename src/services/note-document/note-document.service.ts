@@ -63,15 +63,14 @@ export class NoteDocumentService {
      *
      * @return {Observable<Note>}
      */
-    create(id: String, n: Note): Observable<Note> {
+    create(n: Note): Observable<Note> {
         return fromPromise(this._document.findOne({
-            firstname: {$regex: new RegExp(n.id, 'i')}}))
+            id: {$regex: new RegExp(n.id, 'i')}}))
             .pipe(
                 flatMap(_ => !!_ ?
                     _throw(
                         new Error(`Note with id '${n.id}' already exists`)
                     ) :
-                    n.option_id = 'id',
                     fromPromise(this._document.create(n))
                 ),
                 map((doc: MongooseDocument) => doc.toJSON() as Note)

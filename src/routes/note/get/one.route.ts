@@ -47,6 +47,6 @@ export class GetOneNoteRoute implements OnGet {
      * @param request
      */
     onGet(request: Request): Observable<Note[] | void> {
-        return this._noteService.one(request.params.option_id);
+        return this._noteService.find();
     }
 }
