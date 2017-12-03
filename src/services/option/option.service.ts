@@ -1,27 +1,24 @@
 import { Injectable } from '@hapiness/core';
 import { Observable } from 'rxjs/Observable';
 
-import {OPTION} from '../../data';
 import {Option} from '../../interfaces';
+import { OptionDocumentService } from '../option-document';
+
 
 import { of } from 'rxjs/observable/of';
-import { from } from 'rxjs/observable/from';
 import { _throw } from 'rxjs/observable/throw';
-import { find, flatMap, findIndex, tap, map, filter } from 'rxjs/operators';
+import { flatMap, map, catchError } from 'rxjs/operators';
 import { Biim } from '@hapiness/biim';
 import { HapinessHTTPHandlerResponse } from '@hapiness/core/extensions/http-server';
-import { mergeStatic } from 'rxjs/operators/merge';
 
 @Injectable()
 export class OptionService {
     // private property to store all option
-    private _option: Option[];
 
     /**
      * Class constructor
      */
-    constructor() {
-        this._option = OPTION as Option[];
+    constructor(private _optionDocumentService: OptionDocumentService) {
     }
 
     /**
@@ -30,23 +27,7 @@ export class OptionService {
      * @returns {Observable<Option[]>}
      */
     listAll(): Observable<Option[] | void> {
-        return of(
-            of(this._option)
-        )
-            .pipe(
-                flatMap(_ =>
-                    mergeStatic(
-                        _.pipe(
-                            filter(__ => !!__ && __.length > 0),
-                            map(__ => __)
-                        ),
-                        _.pipe(
-                            filter(__ => !__ || __.length === 0),
-                            map(__ => undefined)
-                        )
-                    )
-                )
-            );
+        return this._optionDocumentService.find();
     }
 
     /**
@@ -57,12 +38,13 @@ export class OptionService {
      * @returns {Observable<Option>}
      */
     one(id: string): Observable<Option> {
-        return from(this._option)
+        return this._optionDocumentService.findById(id)
             .pipe(
-                find(_ => _.id === id),
-                flatMap(_ => !!_ ?
-                    of(_) :
-                    _throw(Biim.notFound(`Option with id '${id}' not found`))
+                catchError(e =>  _throw(Biim.preconditionFailed(e.message))),
+                flatMap(_ =>
+                    !!_ ?
+                        of(_) :
+                        _throw(Biim.notFound(`Option with id '${id}' not found`))
                 )
             );
     }
@@ -75,19 +57,14 @@ export class OptionService {
      * @returns {Observable<HapinessHTTPHandlerResponse>}
      */
     create(opt: Option): Observable<HapinessHTTPHandlerResponse> {
-        return from(this._option)
+        return this._optionDocumentService.create(opt)
             .pipe(
-                find(_ => _.nom.toLowerCase() === opt.nom.toLowerCase()),
-                flatMap(_ => !!_ ?
-                    _throw(
-                        Biim.conflict(`Option with nom '${opt.nom}'already exists`)
-                    ) :
-                    this._addOption(opt)
-                )
+                catchError(e => _throw(Biim.conflict(e.message))),
+                map(_ => ({ response: _, statusCode: 201 }))
             );
     }
 
-    /**
+     /**
      * Update a option in people list
      *
      * @param {string} id of the option to update
@@ -96,13 +73,13 @@ export class OptionService {
      * @returns {Observable<Option>}
      */
     update(id: string, opt: Option): Observable<Option> {
-        return of(this._findOptionIndexOfList(id))
+        return this._optionDocumentService.findByIdAndUpdate(id, opt)
             .pipe(
+                catchError(e => _throw(Biim.preconditionFailed(e.message))),
                 flatMap(_ =>
-                    _.pipe(
-                        tap(__ => this._option[__] = Object.assign(opt, {id})),
-                        map(__ => this._option[__])
-                    )
+                    !!_ ?
+                        of(_) :
+                        _throw(Biim.notFound(`Option with id '${id}' not found`))
                 )
             );
     }
@@ -115,60 +92,15 @@ export class OptionService {
      * @returns {Observable<any>}
      */
     delete(id: string): Observable<void> {
-        return of(this._findOptionIndexOfList(id))
+        return this._optionDocumentService.findByIdAndRemove(id)
             .pipe(
+                catchError(e => _throw(Biim.preconditionFailed(e.message))),
                 flatMap(_ =>
-                    _.pipe(
-                        tap(__ => this._option.splice(__, 1)),
-                        map(__ => undefined)
-                    )
+                    !!_ ?
+                        of(undefined) :
+                        _throw(Biim.notFound(`Option with id '${id}' not found`))
                 )
             );
     }
 
-    /**
-     * Add option with good data in option list
-     *
-     * @param option to add
-     *
-     * @returns {Observable<Option>}
-     *
-     * @private
-     */
-    private _addOption(opt: Option): Observable<HapinessHTTPHandlerResponse> {
-        opt.id = this._createId();
-        this._option = this._option.concat(opt);
-        return of({ response: opt, statusCode: 201 });
-    }
-
-    /**
-     * Finds index of array for current option
-     *
-     * @param {string} id of the option to find
-     *
-     * @returns {Observable<number>}
-     *
-     * @private
-     */
-    private _findOptionIndexOfList(id: string): Observable<number> {
-        return from(this._option)
-            .pipe(
-                findIndex(_ => _.id === id),
-                flatMap(_ => _ > -1 ?
-                    of(_) :
-                    _throw(Biim.notFound(`Option with id '${id}' not found`))
-                )
-            );
-    }
-
-    /**
-     * Creates a new id
-     *
-     * @returns {string}
-     *
-     * @private
-     */
-    private _createId(): string {
-        return `${new Date().getTime()}`;
-    }
 }

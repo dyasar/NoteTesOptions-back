@@ -3,23 +3,35 @@ import { LoggerModule, LoggerService } from '@hapiness/logger';
 import { Observable } from 'rxjs/Observable';
 import {GetAllOptionRoute, GetOneOptionRoute, PostCreateOptionRoute, PutUpdateOptionRoute, DeleteOnePeopleRoute,
     GetOneNoteRoute, PostCreateNoteRoute} from './routes';
-import {OptionService, NoteService} from './services';
+import {OptionService, NoteService, OptionDocumentService, NoteDocumentService} from './services';
 import { SwagModule } from '@hapiness/swag';
 import { Config } from '@hapiness/config';
+import { MongoModule, MongoClientService } from '@hapiness/mongo';
+import { OptionModel, NoteModel } from './models';
 
+// factory to declare dependency between OptionDocumentService and MongoClientService
+// we use it to be sure that MongoClientService will be loaded before OptionDocumentService
+const optionDocumentFactory = (mongoClientService: MongoClientService) => new OptionDocumentService(mongoClientService);
+// factory to declare dependency between NoteDocumentService and MongoClientService
+// we use it to be sure that MongoClientService will be loaded before NoteDocumentService
+const noteDocumentFactory = (mongoClientService2: MongoClientService) => new NoteDocumentService(mongoClientService2);
 
 @HapinessModule({
     version: '1.0.0',
     imports: [
         LoggerModule,
-        SwagModule.setConfig(Config.get('swag'))
+        SwagModule.setConfig(Config.get('swag')) ,
+        MongoModule
+
     ],
     declarations: [GetAllOptionRoute, GetOneOptionRoute, PostCreateOptionRoute, PutUpdateOptionRoute, DeleteOnePeopleRoute,
-        GetOneNoteRoute, PostCreateNoteRoute],
+        GetOneNoteRoute, PostCreateNoteRoute, OptionModel, NoteModel],
     providers: [
         HttpServerService,
         OptionService,
-        NoteService
+        { provide: OptionDocumentService, useFactory: optionDocumentFactory, deps: [MongoClientService] },
+        NoteService,
+        { provide: NoteDocumentService, useFactory: noteDocumentFactory, deps: [MongoClientService] }
     ]
 })
 export class ApplicationModule implements OnStart, OnError {
