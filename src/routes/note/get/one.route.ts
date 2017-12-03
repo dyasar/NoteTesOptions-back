@@ -7,17 +7,17 @@ import * as Joi from 'joi';
 
 
 @Route({
-    path: '/api/note/{id}',
+    path: '/api/note/{option_id}',
     method: 'GET',
     config: {
         validate: {
             params: {
-                id: Joi.string().required()
+                option_id: Joi.string().required()
             }
         },
         response: {
             status: {
-                200: Joi.object().keys({
+                200: Joi.array().items({
                     id: Joi.string().required(),
                     option_id: Joi.string().required(),
                     commentaire: Joi.string().optional(),
@@ -25,7 +25,7 @@ import * as Joi from 'joi';
                     note_option: Joi.number().required(),
                     note_compréhension: Joi.number().required(),
                     note_difficulté_examen: Joi.number().required()
-                })
+                }).unique().min(1)
             }
         },
         description: 'Get one note',
@@ -37,7 +37,7 @@ import * as Joi from 'joi';
 export class GetOneNoteRoute implements OnGet {
     /**
      * Class constructor
-     * @param _onoteService
+     * @param _noteService
      */
     constructor(private _noteService: NoteService) {
     }
@@ -46,7 +46,7 @@ export class GetOneNoteRoute implements OnGet {
      * OnGet implementation
      * @param request
      */
-    onGet(request: Request): Observable<Note> {
-        return this._noteService.one(request.params.id);
+    onGet(request: Request): Observable<Note[] | void> {
+        return this._noteService.one(request.params.option_id);
     }
 }

@@ -5,11 +5,11 @@ import {NOTE} from '../../data';
 import {Note} from '../../interfaces';
 
 import { of } from 'rxjs/observable/of';
-import { from } from 'rxjs/observable/from';
-import { _throw } from 'rxjs/observable/throw';
-import { find, flatMap } from 'rxjs/operators';
-import { Biim } from '@hapiness/biim';
 import { HapinessHTTPHandlerResponse } from '@hapiness/core/extensions/http-server';
+import { flatMap, map, filter } from 'rxjs/operators';
+import { mergeStatic } from 'rxjs/operators/merge';
+
+
 
 @Injectable()
 export class NoteService {
@@ -22,23 +22,25 @@ export class NoteService {
     constructor() {
         this._note = NOTE as Note[];
     }
-    /**
-     * Returns one note of the list matching id in parameter
-     *
-     * @param {string} id of the note
-     *
-     * @returns {Observable<Note>}
-     */
-    one(id: string): Observable<Note> {
-        return from(this._note)
-            .pipe(
-                find(_ => _.option_id === id),
-                flatMap(_ => !!_ ?
-                    of(_) :
-                    _throw(Biim.notFound(`Option with id '${id}' not found`))
+    one(id: string):  Observable<Note[] | void> {
+        return of(
+            of(this._note)
+        )            .pipe(
+            flatMap(_ =>
+                mergeStatic(
+                    _.pipe(
+                        filter(__ => !!__ && __.length > 0),
+                        map(__ => __)
+                    ),
+                    _.pipe(
+                        filter(__ => !__ || __.length === 0),
+                        map(__ => undefined)
+                    )
                 )
-            );
+            )
+        );
     }
+
 
     /**
      * Add note with good data in note list

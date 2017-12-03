@@ -10,9 +10,8 @@ export const NOTE = [
     },
     {
 
-        'id' : '1',
+        'id' : '2',
         'option_id' : '1',
-        'commentaire' : '',
         'note_prof' : 3,
         'note_option' : 3,
         'note_compréhension' : 3,
