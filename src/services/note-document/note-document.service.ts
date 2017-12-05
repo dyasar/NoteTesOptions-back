@@ -30,12 +30,14 @@ export class NoteDocumentService {
     }
 
     /**
-     * Call mongoose method, call toJSON on each result and returns Note[] or undefined
+     * Returns note of the list matching id in parameter
+     *
+     * @param {string} id of the option_id in the db
      *
      * @return {Observable<Note[] | void>}
      */
-    find(): Observable<Note[] | void> {
-        return fromPromise(this._document.find({}))
+    find(id: String): Observable<Note[] | void> {
+        return fromPromise(this._document.find({option_id : id}))
             .pipe(
                 flatMap((docs: MongooseDocument[]) =>
                     of(of(docs))
@@ -63,7 +65,7 @@ export class NoteDocumentService {
      *
      * @return {Observable<Note>}
      */
-    create(n: Note): Observable<Note> {
+    create(n: Note, id: String): Observable<Note> {
         return fromPromise(this._document.findOne({
             id: {$regex: new RegExp(n.id, 'i')}}))
             .pipe(

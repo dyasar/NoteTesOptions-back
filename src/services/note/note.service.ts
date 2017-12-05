@@ -22,9 +22,15 @@ export class NoteService {
     constructor(private _noteDocumentService: NoteDocumentService) {
     }
 
-
-    find():  Observable<Note[] | void> {
-        return this._noteDocumentService.find();
+    /**
+     * Returns note of the list matching id in parameter
+     *
+     * @param {string} id of the option_id
+     *
+     * @returns {Observable<Note[]>}
+     */
+    find(id: String):  Observable<Note[] | void> {
+        return this._noteDocumentService.find(id);
     }
 
 
@@ -35,8 +41,8 @@ export class NoteService {
      *
      * @returns {Observable<HapinessHTTPHandlerResponse>}
      */
-    create(n: Note): Observable<HapinessHTTPHandlerResponse> {
-        return this._noteDocumentService.create(n)
+    create(n: Note, id: String): Observable<HapinessHTTPHandlerResponse> {
+        return this._noteDocumentService.create(n, id)
             .pipe(
                 catchError(e => _throw(Biim.conflict(e.message))),
                 map(_ => ({ response: _, statusCode: 201 }))
