@@ -65,7 +65,7 @@ export class OptionService {
     }
 
      /**
-     * Update a option in people list
+     * Update a option in option list
      *
      * @param {string} id of the option to update
      * @param option data to update

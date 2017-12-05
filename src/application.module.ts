@@ -1,7 +1,7 @@
 import { HapinessModule, HttpServerService, OnError, OnStart } from '@hapiness/core';
 import { LoggerModule, LoggerService } from '@hapiness/logger';
 import { Observable } from 'rxjs/Observable';
-import {GetAllOptionRoute, GetOneOptionRoute, PostCreateOptionRoute, PutUpdateOptionRoute, DeleteOnePeopleRoute,
+import {GetAllOptionRoute, GetOneOptionRoute, PostCreateOptionRoute, PutUpdateOptionRoute, DeleteOneOptionRoute,
     GetOneNoteRoute, PostCreateNoteRoute} from './routes';
 import {OptionService, NoteService, OptionDocumentService, NoteDocumentService} from './services';
 import { SwagModule } from '@hapiness/swag';
@@ -24,7 +24,7 @@ const noteDocumentFactory = (mongoClientService2: MongoClientService) => new Not
         MongoModule
 
     ],
-    declarations: [GetAllOptionRoute, GetOneOptionRoute, PostCreateOptionRoute, PutUpdateOptionRoute, DeleteOnePeopleRoute,
+    declarations: [GetAllOptionRoute, GetOneOptionRoute, PostCreateOptionRoute, PutUpdateOptionRoute, DeleteOneOptionRoute,
         GetOneNoteRoute, PostCreateNoteRoute, OptionModel, NoteModel],
     providers: [
         HttpServerService,

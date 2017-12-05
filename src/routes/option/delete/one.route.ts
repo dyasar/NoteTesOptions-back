@@ -17,7 +17,7 @@ import * as Joi from 'joi';
         tags: ['api', 'option']
     }
 })
-export class DeleteOnePeopleRoute implements OnDelete {
+export class DeleteOneOptionRoute implements OnDelete {
     /**
      * Class constructor
      * @param _optionService
