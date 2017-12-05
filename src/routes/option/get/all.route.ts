@@ -6,7 +6,7 @@ import { Option } from '../../../interfaces';
 import * as Joi from 'joi';
 
 @Route({
-    path: '/api/option',
+    path: '/api/options',
     method: 'GET',
     config: {
         response: {
