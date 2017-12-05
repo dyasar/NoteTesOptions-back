@@ -41,8 +41,8 @@ export class NoteService {
      *
      * @returns {Observable<HapinessHTTPHandlerResponse>}
      */
-    create(n: Note, id: String): Observable<HapinessHTTPHandlerResponse> {
-        return this._noteDocumentService.create(n, id)
+    create(n: Note): Observable<HapinessHTTPHandlerResponse> {
+        return this._noteDocumentService.create(n)
             .pipe(
                 catchError(e => _throw(Biim.conflict(e.message))),
                 map(_ => ({ response: _, statusCode: 201 }))

@@ -65,7 +65,7 @@ export class NoteDocumentService {
      *
      * @return {Observable<Note>}
      */
-    create(n: Note, id: String): Observable<Note> {
+    create(n: Note): Observable<Note> {
         return fromPromise(this._document.findOne({
             id: {$regex: new RegExp(n.id, 'i')}}))
             .pipe(

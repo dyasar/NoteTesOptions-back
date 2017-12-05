@@ -12,9 +12,6 @@ import * as Joi from 'joi';
     method: 'POST',
     config: {
             validate: {
-                params: {
-                    option_id: Joi.string().required()
-                },
             payload: Joi.object().keys({
                 option_id: Joi.string().required(),
                 commentaire: Joi.string().optional(),
@@ -60,6 +57,6 @@ export class PostCreateNoteRoute implements OnPost {
      * @param request
      */
     onPost(request: Request): Observable<HapinessHTTPHandlerResponse> {
-        return this._noteService.create(request.payload as Note, request.params.option_id);
+        return this._noteService.create(request.payload as Note);
     }
 }
