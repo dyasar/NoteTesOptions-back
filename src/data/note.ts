@@ -5,8 +5,8 @@ export const NOTE = [
         'commentaire' : 'bof bof',
         'note_prof' : 2,
         'note_option' : 4,
-        'note_compréhension' : 3,
-        'note_difficulté_examen' : 3,
+        'note_comprehension' : 3,
+        'note_difficulte_examen' : 3,
     },
     {
 
@@ -14,7 +14,7 @@ export const NOTE = [
         'option_id' : '1',
         'note_prof' : 3,
         'note_option' : 3,
-        'note_compréhension' : 3,
-        'note_difficulté_examen' : 3,
+        'note_comprehension' : 3,
+        'note_difficulte_examen' : 3,
     }
 ];

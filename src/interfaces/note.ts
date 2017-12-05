@@ -4,6 +4,6 @@ export interface Note {
     commentaire?: string;
     note_prof: number;
     note_option: number;
-    note_compréhension: number;
+    note_comprehension: number;
     note_difficulté_examen: number;
 }

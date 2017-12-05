@@ -23,8 +23,8 @@ import * as Joi from 'joi';
                     commentaire: Joi.string().optional(),
                     note_prof: Joi.number().required(),
                     note_option: Joi.number().required(),
-                    note_compréhension: Joi.number().required(),
-                    note_difficulté_examen: Joi.number().required()
+                    note_comprehension: Joi.number().required(),
+                    note_difficulte_examen: Joi.number().required()
                 }).unique().min(1)
             }
         },

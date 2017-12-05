@@ -17,8 +17,8 @@ import * as Joi from 'joi';
                 commentaire: Joi.string().optional(),
                 note_prof: Joi.number().min(0).max(5).required(),
                 note_option: Joi.number().min(0).max(5).required(),
-                note_compréhension: Joi.number().min(0).max(5).required(),
-                note_difficulté_examen: Joi.number().min(0).max(5).required()
+                note_comprehension: Joi.number().min(0).max(5).required(),
+                note_difficulte_examen: Joi.number().min(0).max(5).required()
             })
         },
         payload: {
@@ -34,8 +34,8 @@ import * as Joi from 'joi';
                     commentaire: Joi.string().optional(),
                     note_prof: Joi.number().min(0).max(5).required(),
                     note_option: Joi.number().min(0).max(5).required(),
-                    note_compréhension: Joi.number().min(0).max(5).required(),
-                    note_difficulté_examen: Joi.number().min(0).max(5).required()
+                    note_comprehension: Joi.number().min(0).max(5).required(),
+                    note_difficulte_examen: Joi.number().min(0).max(5).required()
                 })
             }
         },
