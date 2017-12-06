@@ -15,6 +15,7 @@ import * as Joi from 'joi';
                 id: Joi.string().required()
             },
             payload: Joi.object().keys({
+                id: Joi.string().required(),
                 nom: Joi.string().required(),
                 description: Joi.string().min(10).required(),
                 prof: Joi.string().required()
