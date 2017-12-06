@@ -8,7 +8,7 @@ import * as Joi from 'joi';
 
 
 @Route({
-    path: '/api/note/{option_id}',
+    path: '/api/note',
     method: 'POST',
     config: {
             validate: {
